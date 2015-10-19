@@ -27,6 +27,16 @@ func resourceCloudStackVPNConnection() *schema.Resource {
 				Required: true,
 				ForceNew: true,
 			},
+			"fordisplay": &schema.Schema{
+				Type: 	schema.TypeBool,
+				Required: false,
+				ForceNew: false,
+			},
+			"passive": &schema.Schema{
+				Type:	schema.TypeBool,
+				Required: false,
+				ForceNew: true,
+			},
 		},
 	}
 }
@@ -38,6 +48,8 @@ func resourceCloudStackVPNConnectionCreate(d *schema.ResourceData, meta interfac
 	p := cs.VPN.NewCreateVpnConnectionParams(
 		d.Get("customergatewayid").(string),
 		d.Get("vpngatewayid").(string),
+		d.Get("fordisplay").(bool),
+		d.Get("passive").(bool),
 	)
 
 	// Create the new VPN Connection
@@ -68,6 +80,8 @@ func resourceCloudStackVPNConnectionRead(d *schema.ResourceData, meta interface{
 
 	d.Set("customergatewayid", v.S2scustomergatewayid)
 	d.Set("vpngatewayid", v.S2svpngatewayid)
+	d.Set("fordisplay", v.S2fordisplay)
+	d.Set("passive", v.S2passive)
 
 	return nil
 }

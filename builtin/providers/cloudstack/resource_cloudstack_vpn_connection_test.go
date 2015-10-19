@@ -124,11 +124,14 @@ resource "cloudstack_vpn_customer_gateway" "bar" {
 resource "cloudstack_vpn_connection" "foo-bar" {
   customergatewayid = "${cloudstack_vpn_customer_gateway.foo.id}"
   vpngatewayid = "${cloudstack_vpn_gateway.bar.id}"
+  fordisplay = True
 }
 
 resource "cloudstack_vpn_connection" "bar-foo" {
   customergatewayid = "${cloudstack_vpn_customer_gateway.bar.id}"
   vpngatewayid = "${cloudstack_vpn_gateway.foo.id}"
+  fordisplay = True
+  passive = True
 }`,
 	CLOUDSTACK_VPC_CIDR_1,
 	CLOUDSTACK_VPC_OFFERING,
