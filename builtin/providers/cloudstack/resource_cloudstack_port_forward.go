@@ -2,11 +2,10 @@ package cloudstack
 
 import (
 	"fmt"
-	"sync"
-	"time"
-
 	"strconv"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform/helper/schema"
@@ -46,6 +45,11 @@ func resourceCloudStackPortForward() *schema.Resource {
 						"private_port": &schema.Schema{
 							Type:     schema.TypeInt,
 							Required: true,
+						},
+
+						"private_ip": &schema.Schema{
+							Type:     schema.TypeString,
+							Optional: true,
 						},
 
 						"public_port": &schema.Schema{
@@ -170,6 +174,11 @@ func createPortForward(
 
 	// Do not open the firewall automatically in any case
 	p.SetOpenfirewall(false)
+
+	// Set Vmguestip if private_ip has been supplied
+	if forward["private_ip"].(string) != "" {
+		p.SetVmguestip(forward["private_ip"].(string))
+	}
 
 	r, err := cs.Firewall.CreatePortForwardingRule(p)
 	if err != nil {
